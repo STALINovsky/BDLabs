@@ -11,7 +11,7 @@ namespace BDLabs.Helpers
     {
         public static void PrintTable<T>(IQueryable<T> dbSet) where T : class
         {
-            Console.WriteLine($"Data table or View: {dbSet.GetType().GetGenericArguments()[0].Name}");
+            Console.WriteLine($"Data table or View: {typeof(T).Name}");
             var table = ConsoleTable.From<T>(dbSet);
             table.Write();
         }
