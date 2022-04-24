@@ -16,8 +16,8 @@ namespace BDLabs
             DoCringe();
 
             ConsoleHelper.PrintTable(dbContext.Employees);
-            dbContext.Employees.Add(new() { Name = "Alexey", Surname = "Suslav", Age = 19, PhoneNumber = "+6666666", Salary = 99999 });
-            dbContext.Employees.Add(new() { Name = "Egor", Surname = "Katlinsky", Age = 20, PhoneNumber = "+5555555", Salary = 88888 });
+            dbContext.Employees.Add(ConsoleHelper.GetEmploeeFromUserInput());
+            dbContext.Employees.Add(ConsoleHelper.GetEmploeeFromUserInput());
             dbContext.SaveChanges();
             ConsoleHelper.PrintTable(dbContext.Employees);
         }
@@ -25,10 +25,10 @@ namespace BDLabs
 
         public static void DoCringe()
         {
-            var bookStore = new DataSet("BookStore");
-            var booksTable = new DataTable("Books");
+            var ProductStore = new DataSet("ProductStore");
+            var ProductTable = new DataTable("Product");
             // добавление  таблицы в  dataset
-            bookStore.Tables.Add(booksTable);
+            ProductStore.Tables.Add(ProductTable);
 
             // создание столбцов для таблицы Books
             var idColumn = new DataColumn("Id", Type.GetType("System.Int32"));
@@ -44,24 +44,22 @@ namespace BDLabs
             var discountColumn = new DataColumn("Discount", Type.GetType("System.Decimal"));
             discountColumn.Expression = "Price * 0.2";
 
-            booksTable.Columns.Add(idColumn);
-            booksTable.Columns.Add(nameColumn);
-            booksTable.Columns.Add(priceColumn);
-            booksTable.Columns.Add(discountColumn);
-            // определение первичного ключа таблицы books
-            booksTable.PrimaryKey = new DataColumn[] { booksTable.Columns["Id"] };
+            ProductTable.Columns.Add(idColumn);
+            ProductTable.Columns.Add(nameColumn);
+            ProductTable.Columns.Add(priceColumn);
+            ProductTable.Columns.Add(discountColumn);
+            // определение первичного ключа таблицы product
+            ProductTable.PrimaryKey = new DataColumn[] { ProductTable.Columns["Id"] };
 
-            DataRow row = booksTable.NewRow();
-            row.ItemArray = new object[] { null, "Война и мир", 200 };
-            booksTable.Rows.Add(row); // добавление первой строки
-            booksTable.Rows.Add(new object[] { null, "Отцы и дети", 170 }); // добавление второй строки
-            booksTable.Rows.Add(new object[] { null, "Преступление и наказание", 270 }); // добавление //третьей строки
-            booksTable.Rows.Add(new object[] { null, "Идиот", 270 }); // добавление четвертой строки
-            booksTable.Rows.Add(new object[] { null, "Арзипелаг ГУЛАГ", 3000 }); // добавление пятой //строки
+            DataRow row = ProductTable.NewRow();
+            row.ItemArray = new object[] { null, "Монитор", 200 };
+            ProductTable.Rows.Add(row); // добавление первой строки
+            ProductTable.Rows.Add(new object[] { null, "Мышка", 170 }); // добавление второй строки
+            ProductTable.Rows.Add(new object[] { null, "Клавиатура", 270 }); // добавление //третьей строки
+            ProductTable.Rows.Add(new object[] { null, "Системный блок", 270 }); // добавление четвертой строки
+            ProductTable.Rows.Add(new object[] { null, "Процессор", 3000 }); // добавление пятой //строки
 
-
-
-            foreach (DataRow r in booksTable.Rows)
+            foreach (DataRow r in ProductTable.Rows)
             {
                 string result = "";
                 foreach (var cell in r.ItemArray)

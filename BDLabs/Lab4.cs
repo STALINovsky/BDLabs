@@ -17,6 +17,7 @@ namespace BDLabs
     {
         public static void DoLab(BDLabsDbContext dbContext)
         {
+            ConsoleHelper.PrintTable(dbContext.Employees);
             Console.WriteLine("Enter 1 to sort by Name");
             Console.WriteLine("Enter 2 to sort by Name DESC");
             Console.WriteLine("Enter 3 to sort by Salary");

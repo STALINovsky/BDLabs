@@ -17,9 +17,11 @@ namespace BDLabs
             var result = DbHelper.ExecuteScalar("SELECT COUNT(*) FROM Employees", dbContext);
             Console.WriteLine($"result of 'SELECT COUNT(*) FROM Employees': {result} ");
 
-            var resultOfPrecudere = DbHelper.ExecuteProcedure("EXEC @returnValue = AddEmployee @Name = 'Dmitry', @SurName = 'Ovchinnikov', @Age = 18, @PhoneNumber = '+7777777', @Salary = 9999", dbContext);
-            Console.WriteLine($"Result of procedure {resultOfPrecudere}");
 
+            var user = ConsoleHelper.GetEmploeeFromUserInput();
+            var resultOfPrecudere = DbHelper.ExecuteProcedure($"EXEC @returnValue = AddEmployee @Name = '{user.Name}', @SurName = '{user.Surname}', @Age = {user.Age}, @PhoneNumber = '{user.PhoneNumber}', @Salary = {user.Salary}", dbContext);
+            Console.WriteLine($"Result of procedure {resultOfPrecudere}");
+            ConsoleHelper.PrintTable(dbContext.Employees);
         }
     }
 }
