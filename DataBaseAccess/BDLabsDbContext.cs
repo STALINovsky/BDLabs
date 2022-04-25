@@ -5,7 +5,7 @@ namespace DataBaseAccess
 {
     public class BDLabsDbContext : DbContext
     {
-        public const string ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=CourseDb;Integrated Security=True;";
+        public const string ConnectionString = "Data Source=localhost;Initial Catalog=CourseDb;Integrated Security=True;";
         public BDLabsDbContext() : base()
         {
         }
@@ -15,7 +15,7 @@ namespace DataBaseAccess
             optionsBuilder.UseSqlServer(ConnectionString);
         }
 
-        public DbSet<Consumer> Consumers { get; set; }
+        public DbSet<Producer> Producers { get; set; }
         public DbSet<Emploee> Employees { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
