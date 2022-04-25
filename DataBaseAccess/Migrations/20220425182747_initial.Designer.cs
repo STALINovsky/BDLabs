@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBaseAccess.Migrations
 {
     [DbContext(typeof(BDLabsDbContext))]
-    [Migration("20220414230143_Initial")]
-    partial class Initial
+    [Migration("20220425182747_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,27 +23,6 @@ namespace DataBaseAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("Model.Consumer", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Consumers");
-                });
 
             modelBuilder.Entity("Model.Emploee", b =>
                 {
@@ -84,10 +63,6 @@ namespace DataBaseAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ConsumerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
@@ -97,13 +72,37 @@ namespace DataBaseAccess.Migrations
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<string>("ProducerId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasIndex("ConsumerId");
+                    b.HasKey("Id");
 
                     b.HasIndex("EmploeeId");
 
+                    b.HasIndex("ProducerId");
+
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Model.Producer", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Producers");
                 });
 
             modelBuilder.Entity("Model.Product", b =>
@@ -125,11 +124,17 @@ namespace DataBaseAccess.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("ProducerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("StockCount")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProducerId");
 
                     b.ToTable("Products");
                 });
@@ -169,21 +174,30 @@ namespace DataBaseAccess.Migrations
 
             modelBuilder.Entity("Model.Order", b =>
                 {
-                    b.HasOne("Model.Consumer", "Consumer")
-                        .WithMany()
-                        .HasForeignKey("ConsumerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Model.Emploee", "Emploee")
                         .WithMany()
                         .HasForeignKey("EmploeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Consumer");
+                    b.HasOne("Model.Producer", "Producer")
+                        .WithMany()
+                        .HasForeignKey("ProducerId");
 
                     b.Navigation("Emploee");
+
+                    b.Navigation("Producer");
+                });
+
+            modelBuilder.Entity("Model.Product", b =>
+                {
+                    b.HasOne("Model.Producer", "Producer")
+                        .WithMany("Products")
+                        .HasForeignKey("ProducerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Producer");
                 });
 
             modelBuilder.Entity("Model.PurchaseProduct", b =>
@@ -196,6 +210,11 @@ namespace DataBaseAccess.Migrations
             modelBuilder.Entity("Model.Order", b =>
                 {
                     b.Navigation("PurchaseProducts");
+                });
+
+            modelBuilder.Entity("Model.Producer", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
